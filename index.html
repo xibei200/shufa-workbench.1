@@ -1,0 +1,1397 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-page-node-id="uxqkn9SvbxAgo0IBIoG6lw">
+<head data-page-node-id="QDuSsDbhGNlodvURT6uTXN">
+<meta charset="UTF-8" data-page-node-id="bF3autZ36Rl7PzGYblDRNM">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" data-page-node-id="xhoTxNbGFUMuFedWGKXeQN">
+<meta name="apple-mobile-web-app-capable" content="yes" data-page-node-id="hfHuwuwHp9VcpZScHR58nj">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="书法台">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#a8352a">
+<meta name="format-detection" content="telephone=no">
+<title>书法课消管理工作台</title>
+<style>
+:root{
+  --bg:#f5f2ec; --card:#fff; --line:#e9e2d7; --line2:#f1ece3;
+  --ink:#2f2a26; --ink2:#6b6259; --ink3:#a1978c;
+  --zhu:#a8352a; --zhu-soft:#f8e9e5;
+  --green:#2e7d5b; --green-soft:#e5f1ea;
+  --amber:#b8791f; --amber-soft:#f9eeda;
+  --blue:#2f5d8a; --blue-soft:#e7eef6;
+  --r:14px; --sh:0 1px 2px rgba(47,42,38,.05),0 4px 14px rgba(47,42,38,.05);
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0}
+body{
+  background:var(--bg); color:var(--ink);
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"PingFang SC","Microsoft YaHei",sans-serif;
+  font-size:15px; line-height:1.55; padding-bottom:calc(84px + env(safe-area-inset-bottom));
+}
+.wrap{max-width:980px;margin:0 auto;padding:16px 14px 40px}
+h1,h2,h3{margin:0}
+button{font-family:inherit;font-size:15px;cursor:pointer;border:none;background:none;color:inherit;touch-action:manipulation}
+input,select,textarea{font-family:inherit;font-size:16px;color:var(--ink)}
+svg{display:block}
+
+/* ---------- header ---------- */
+.top{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:14px}
+.brand{display:flex;align-items:center;gap:10px;flex:1;min-width:0}
+.logo{width:40px;height:40px;border-radius:11px;background:var(--zhu);display:flex;align-items:center;justify-content:center;flex:none}
+.brand h1{font-size:19px;font-weight:700;letter-spacing:.5px}
+.brand p{margin:0;font-size:12px;color:var(--ink3)}
+.tools{display:flex;gap:8px;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:6px;min-height:38px;padding:0 13px;border-radius:10px;
+  background:var(--card);border:1px solid var(--line);color:var(--ink2);font-size:14px;font-weight:600}
+.btn:active{transform:scale(.97)}
+.btn.primary{background:var(--zhu);border-color:var(--zhu);color:#fff}
+.btn.ghost{background:transparent}
+.btn.sm{min-height:32px;padding:0 10px;font-size:13px;border-radius:8px}
+.btn.danger{color:var(--zhu);border-color:#f0d5d0}
+.btn.icon{min-height:38px;padding:0 10px}
+
+/* ---------- notice ---------- */
+.notice{display:flex;gap:8px;align-items:flex-start;background:var(--amber-soft);border:1px solid #f0e0bd;
+  color:#7a5410;border-radius:12px;padding:10px 12px;font-size:13px;margin-bottom:12px}
+.notice button{margin-left:auto;flex:none;font-size:13px;font-weight:700;color:#7a5410;text-decoration:underline}
+
+/* ---------- today ---------- */
+.today{background:var(--card);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--sh);
+  padding:14px;margin-bottom:14px;border-left:4px solid var(--zhu)}
+.today h2{font-size:16px;display:flex;align-items:center;gap:7px}
+.today h2 span.date{font-size:12px;font-weight:500;color:var(--ink3);margin-left:auto}
+.tlist{margin-top:10px;display:flex;flex-direction:column;gap:8px}
+.titem{display:flex;align-items:center;gap:10px;padding:10px 11px;border-radius:11px;background:#faf8f4;border:1px solid var(--line2)}
+.titem.od{background:var(--zhu-soft);border-color:#f1d7d1}
+.titem .ic{flex:none;width:26px;height:26px;border-radius:8px;display:flex;align-items:center;justify-content:center;background:#efe9e0;color:var(--ink2)}
+.titem.od .ic{background:#f3d6d0;color:var(--zhu)}
+.titem .tx{flex:1;min-width:0;font-size:14px}
+.titem .tx b{font-weight:600}
+.titem .tx em{font-style:normal;color:var(--ink3);font-size:12px;display:block}
+.titem.od .tx b{color:var(--zhu)}
+.empty{padding:12px;text-align:center;color:var(--ink3);font-size:13px;background:#faf8f4;border-radius:11px;border:1px dashed var(--line)}
+
+/* ---------- tabs ---------- */
+.tabs{display:flex;gap:6px;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:5px;margin-bottom:14px}
+.tab{flex:1;display:flex;align-items:center;justify-content:center;gap:6px;min-height:40px;border-radius:9px;
+  font-size:14px;font-weight:600;color:var(--ink2)}
+.tab.on{background:var(--zhu);color:#fff}
+.tab svg{opacity:.9}
+.seg{display:flex;gap:6px;background:#efe9e0;border-radius:10px;padding:4px}
+.seg-btn{flex:1;border:none;background:none;font-family:inherit;font-size:14px;font-weight:600;color:var(--ink2);
+  padding:9px 6px;border-radius:7px;cursor:pointer;min-height:44px}
+.seg-btn.active{background:#fff;color:var(--zhu);box-shadow:0 1px 4px rgba(47,42,38,.12)}
+
+
+/* ---------- card ---------- */
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--sh);padding:14px;margin-bottom:14px}
+.card h3{font-size:15px;display:flex;align-items:center;gap:7px;margin-bottom:4px}
+.sub{font-size:12px;color:var(--ink3);margin:0 0 12px}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.grow{flex:1;min-width:0}
+.field{display:flex;flex-direction:column;gap:4px}
+.field label{font-size:12px;color:var(--ink3);font-weight:600}
+.inp{width:100%;min-height:44px;padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:#fdfcfa;outline:none}
+.inp:focus{border-color:var(--zhu);background:#fff}
+textarea.inp{min-height:70px;resize:vertical;line-height:1.5}
+select.inp{appearance:none;background-image:linear-gradient(45deg,transparent 50%,var(--ink3) 50%),linear-gradient(135deg,var(--ink3) 50%,transparent 50%);
+  background-position:calc(100% - 16px) 20px,calc(100% - 11px) 20px;background-size:5px 5px,5px 5px;background-repeat:no-repeat}
+
+/* ---------- student card ---------- */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px}
+.sc{border:1px solid var(--line);border-radius:12px;padding:12px;background:#fdfcfa}
+.sc.low{border-color:#f1d7d1;background:var(--zhu-soft)}
+.sc .nm{display:flex;align-items:center;gap:8px;font-size:16px;font-weight:700}
+.sc .nm .ava{width:30px;height:30px;border-radius:9px;background:var(--blue-soft);color:var(--blue);
+  display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;flex:none}
+.sc .acts{margin-left:auto;display:flex;gap:6px}
+.kv{display:flex;gap:8px;margin-top:10px}
+.kv div{flex:1;background:#fff;border:1px solid var(--line2);border-radius:10px;padding:7px 9px;text-align:center}
+.kv b{display:block;font-size:17px;font-weight:700}
+.kv span{font-size:11px;color:var(--ink3)}
+.kv .c{color:var(--zhu)} .kv .r{color:var(--green)}
+.bar{height:8px;border-radius:99px;background:#efe9e0;overflow:hidden;margin-top:10px}
+.bar i{display:block;height:100%;border-radius:99px;background:var(--zhu)}
+.warn{margin-top:8px;font-size:12px;color:var(--zhu);font-weight:600}
+
+/* ---------- list row ---------- */
+.lrow{display:flex;align-items:center;gap:10px;padding:10px;border:1px solid var(--line);border-radius:12px;background:#fdfcfa;margin-bottom:8px}
+.lrow.dim{opacity:.55}
+.lrow .who{flex:1;min-width:0}
+.lrow .who b{font-size:15px}
+.lrow .who em{font-style:normal;display:block;font-size:12px;color:var(--ink3)}
+.seg{display:flex;gap:4px;background:#f2ede5;padding:3px;border-radius:10px;flex:none}
+.seg button{min-height:34px;padding:0 11px;border-radius:8px;font-size:13px;font-weight:600;color:var(--ink2)}
+.seg button.on{background:#fff;box-shadow:0 1px 2px rgba(0,0,0,.06)}
+.seg button.on[data-v="present"]{color:var(--green)}
+.seg button.on[data-v="leave"]{color:var(--amber)}
+.seg button.on[data-v="absent"]{color:var(--ink2)}
+.hin{width:74px;min-height:40px;padding:6px 8px;border:1px solid var(--line);border-radius:9px;text-align:center;background:#fff;flex:none}
+.rmk{width:100%;min-height:38px;padding:8px 10px;border:1px solid var(--line);border-radius:9px;background:#fff}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{display:inline-flex;align-items:center;min-height:40px;padding:0 13px;border-radius:99px;border:1px solid var(--line);background:#fdfcfa;font-size:14px;font-weight:600;color:var(--ink2)}
+.chip.on{background:var(--zhu);border-color:var(--zhu);color:#fff}
+.nametag{display:inline-flex;align-items:center;gap:4px;min-height:40px;padding:0 12px;border-radius:10px;border:1px solid #d9e3ef;background:var(--blue-soft);color:var(--blue);font-size:14px;font-weight:600}
+.nametag.on{background:var(--blue);border-color:var(--blue);color:#fff}
+.badge{display:inline-flex;align-items:center;gap:4px;font-size:12px;font-weight:700;padding:2px 8px;border-radius:99px;flex:none}
+.badge.present{background:var(--green-soft);color:var(--green)}
+.badge.leave{background:var(--amber-soft);color:var(--amber)}
+.badge.absent{background:#f0ece5;color:var(--ink2)}
+.badge.none{background:#f0ece5;color:var(--ink3)}
+
+/* ---------- detail table ---------- */
+.dtl{margin-top:10px;border-top:1px dashed var(--line);padding-top:10px;overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:13px;min-width:420px}
+th,td{text-align:left;padding:7px 8px;border-bottom:1px solid var(--line2);white-space:nowrap}
+th{color:var(--ink3);font-weight:600;font-size:12px}
+td.num{color:var(--zhu);font-weight:700}
+
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:12px}
+.stat{background:#fdfcfa;border:1px solid var(--line);border-radius:12px;padding:10px;text-align:center}
+.stat b{display:block;font-size:20px;font-weight:700}
+.stat span{font-size:11px;color:var(--ink3)}
+.chartbox{background:#fdfcfa;border:1px solid var(--line);border-radius:12px;padding:10px 6px 4px}
+.foot{text-align:center;color:var(--ink3);font-size:12px;padding:8px 0 0}
+
+/* ---------- mobile bottom nav ---------- */
+@media (max-width:768px){
+  body{padding-bottom:calc(96px + env(safe-area-inset-bottom))}
+  .wrap{padding:12px 11px 30px}
+  .brand h1{font-size:17px}
+  .grid{grid-template-columns:1fr}
+  .stats{grid-template-columns:repeat(3,1fr);gap:7px}
+  .stat b{font-size:17px}
+  .lrow{flex-wrap:wrap}
+  .lrow .who{flex:1 1 100%}
+  .seg{flex:1 1 auto}
+  .seg button{flex:1;min-height:44px;padding:0 6px}
+  .hin{width:66px;min-height:44px}
+  .tabs{position:fixed;left:0;right:0;bottom:0;z-index:50;border-radius:0;border-left:none;border-right:none;
+    border-bottom:none;margin:0;gap:1px;padding:5px 2px calc(5px + env(safe-area-inset-bottom));
+    box-shadow:0 -2px 14px rgba(47,42,38,.09)}
+  .tab{flex-direction:column;gap:1px;font-size:9.5px;min-height:46px;padding:0 1px}
+  .tab svg{width:18px;height:18px}
+  .chip,.nametag{min-height:42px}
+}
+</style>
+</head>
+<body data-page-node-id="dr59nctG3LA5CtG3yY9LrI">
+<div class="wrap" data-page-node-id="8EK5GBKP1nd2Ua96rS1ds6">
+
+  <div class="top" data-page-node-id="kFiQCotVy9qOltXxIGph11">
+    <div class="brand" data-page-node-id="foiCg8BBUI0mBRyXq0h6HC">
+      <div class="logo" data-page-node-id="YoJyROmv7AYzGrMFWALbo7">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" data-page-node-id="Hxs6h1JbByNtCZjFAjX3nx">
+          <path d="M4 20c2-1 3-3 3-5s-1-3-1-5 1-4 3-5 4 1 5 3 2 5 2 7" data-page-node-id="NP5auEZmDXijDQ7B3gTKPb"/><path d="M12 4c1.5 2 2 4 2 6" data-page-node-id="gBeh8WZOzorHPACMtekuYV"/>
+        </svg>
+      </div>
+      <div data-page-node-id="tJqAIqlzVVxDojllircW0e">
+        <h1 data-page-node-id="4mwyTaN2hGrRAFeTbkfbkB">书法课消管理工作台</h1>
+        <p data-page-node-id="EIRuCWLEwSgpGQHEMNRfUE">学员 · 点名 · 课时 · 查询</p>
+      </div>
+    </div>
+    <div class="tools" data-page-node-id="uyBHNgGK0MEhuelMzAk2Uo">
+      <button class="btn" data-act="export" data-page-node-id="WfZSBHwjhcGLrAXYA1inNP">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-page-node-id="wkaytD3lpoRyaJvGFLIn4P"><path d="M12 3v12" data-page-node-id="uKVB6WzEx4WRylzsgKD1QM"/><path d="M7 10l5 5 5-5" data-page-node-id="YlDzwggkmzfW2tQM7pJuy2"/><path d="M4 21h16" data-page-node-id="eT2s39UECR67uRoDgxcOlk"/></svg>
+        导出备份
+      </button>
+      <button class="btn" data-act="copy">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v1"/></svg>
+        复制备份
+      </button>
+      <button class="btn" data-act="import" data-page-node-id="FcS6LClGY2BIdX301DEBIr">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-page-node-id="tNQvhQ0mE5idQIbJld5t51"><path d="M12 15V3" data-page-node-id="yQMDFLJ4Gwpmqt2MTJ6wgz"/><path d="M7 8l5-5 5 5" data-page-node-id="7YZptKyAFFTIu43ubpaf1l"/><path d="M4 21h16" data-page-node-id="ppyEvin2BILfX3r5h4KOQd"/></svg>
+        导入恢复
+      </button>
+      <button class="btn" data-act="paste">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1"/><path d="M8 13h8M8 17h5"/></svg>
+        粘贴恢复
+      </button>
+      <button class="btn" data-act="csv" data-page-node-id="K4wBkp5LEWY1fd7VjEdeyX">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-page-node-id="hAYCbRkdO2HaVN4LPaDMAM"><rect x="4" y="3" width="16" height="18" rx="2" data-page-node-id="QuQF7FpAH3vgjHnGle95wO"/><path d="M8 8h8M8 12h8M8 16h5" data-page-node-id="82qrpOChBGDO7QF2S9KnLT"/></svg>
+        导出CSV
+      </button>
+      <button class="btn danger" data-act="reset" data-page-node-id="u4iY6gog4rUL9XcVx7Ruj7">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-page-node-id="3dGkfuek0CnQA3713s4VHn"><path d="M3 6h18" data-page-node-id="KK7dZNafHJEC86FnKQMuiS"/><path d="M8 6V4h8v2" data-page-node-id="A1N2IQbB3WkYbZTMnnrmDF"/><path d="M6 6l1 14h10l1-14" data-page-node-id="coTiEw2tgAjrvPFuuLtQXt"/></svg>
+        清空数据
+      </button>
+    </div>
+  </div>
+
+  <div id="notice" data-page-node-id="RNBFGNYoIfZDGo5IqvaTwW"></div>
+
+  <!-- 今天要处理 -->
+  <section class="today" data-page-node-id="FkdJYZriGkdV6ZGTFrtb39">
+    <h2 data-page-node-id="ErVgW4H5SCH2Wjp1G8l7db">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#a8352a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-page-node-id="uUPDVdAcgG2gEJscukrgXc"><circle cx="12" cy="12" r="9" data-page-node-id="GueXhL4JX0ua6GXwCvI9Td"/><path d="M12 7v5l3 2" data-page-node-id="egQoivhCaSghB0PRvXPm3K"/></svg>
+      今天要处理
+      <span class="date" id="todayDate" data-page-node-id="x2mrir2mocjmdwGwq99WES"></span>
+    </h2>
+    <div class="tlist" id="todayList" data-page-node-id="5e9WY7oZXSH61uPAmSZijN"></div>
+  </section>
+
+  <!-- tabs -->
+  <nav class="tabs" data-page-node-id="mmmXzqDbmLkBO6EBQ7uFSV">
+    <button class="tab" data-act="tab" data-tab="students" data-page-node-id="9JJ7RrG4ZhIBR2kofP60xf">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-page-node-id="rrk9JF09xjoWR0lkjS5Jty"><path d="M16 20v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" data-page-node-id="tGmMUajNrSJS050ZAYTx2z"/><circle cx="9" cy="7" r="4" data-page-node-id="bCJZyTKK69D0g7dcaSoEQn"/><path d="M22 20v-2a4 4 0 0 0-3-3.87" data-page-node-id="DEk97S0BABJfYj2MidvorA"/></svg>
+      <span data-page-node-id="GkikXHr61DYkcCxOJ6FpNG">学员</span>
+    </button>
+    <button class="tab" data-act="tab" data-tab="rollcall" data-page-node-id="fpRsctL0ygJNWV6JeAZQVh">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-page-node-id="gjPMVgZ5Ug4YY0jFM6gwed"><path d="M9 11l3 3 8-8" data-page-node-id="CHuqGaTlgKV2rsetsCkNuF"/><path d="M20 12v7a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h9" data-page-node-id="3UaaTiu7sJIL1Nhhze8V82"/></svg>
+      <span data-page-node-id="LT7qoCclFDtTevYS8fHNzE">点名</span>
+    </button>
+    <button class="tab" data-act="tab" data-tab="hours" data-page-node-id="J6B66k6CyqsHd4I6AGgdMa">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-page-node-id="x5t1NyqA5GFaeMCB1s2onV"><path d="M4 4h11l5 5v11a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1z" data-page-node-id="mbxYA3iQr2DwC62WrCqChF"/><path d="M14 4v6h6" data-page-node-id="XNkR1wr38QMVEoqACzyDEu"/><path d="M8 14h7M8 17h5" data-page-node-id="5f4Z7Fd53fEJJPOMdhN7Vr"/></svg>
+      <span data-page-node-id="vdQzwM14ogVjS6Ax6SrLv1">课时</span>
+    </button>
+    <button class="tab" data-act="tab" data-tab="query" data-page-node-id="o3SRNHoxLa43GRLSi3D9cF">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-page-node-id="lZ940Dq8bo4d66XJGAf95G"><circle cx="11" cy="11" r="7" data-page-node-id="BmWa5bo8ayumdHlJRL4DuU"/><path d="M20 20l-4-4" data-page-node-id="9S70SSZnhJYB5FfxWpMpy7"/></svg>
+      <span data-page-node-id="cdkYXceB3HMk9oQSOk9Kx1">查询</span>
+    </button>
+    <button class="tab" data-act="tab" data-tab="renew">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="12" rx="2"/><circle cx="12" cy="12" r="2.5"/><path d="M6 10v.01M18 14v.01"/></svg>
+      <span>续费</span>
+    </button>
+    <button class="tab" data-act="tab" data-tab="schedule">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M8 3v4M16 3v4M3 11h18"/></svg>
+      <span>课表</span>
+    </button>
+  </nav>
+
+  <main data-page-node-id="XayAvi3dBv8iuxWNgaEdhF">
+    <section id="tab-students" data-page-node-id="Teh0eFCAwBIsmuwXTPfGRz"></section>
+    <section id="tab-rollcall" data-page-node-id="MzzX7cdJHYwg11BWAtBL1Z"></section>
+    <section id="tab-hours" data-page-node-id="OmSLznt3O1r6iiZn6Mx2xw"></section>
+    <section id="tab-query" data-page-node-id="qyjLYWuyFOGXpq1OypcTkC"></section>
+    <section id="tab-renew"></section>
+    <section id="tab-schedule"></section>
+  </main>
+
+  <p class="foot" data-page-node-id="xVArn4jiP4JlkrAQOLha3i">数据保存在本机浏览器，建议每周导出一次备份 · 手机浏览器打开可用「添加到主屏幕」当 APP 用</p>
+</div>
+
+<input type="file" id="fileIn" accept="application/json,.json" style="display:none" data-page-node-id="H3rS7A8plL7tjljqBT6haq">
+
+<script>
+/* ============ 数据层 ============ */
+var KEY = 'wb_calligraphy_v1';
+var WD = ['一','二','三','四','五','六','日'];
+var state = { students: [], lessons: {}, renewals: [], schedule: {}, curDate: '', tab: 'students',
+  editId: '', openSid: '', kw: '', seeded: false, rptMonth: '', renewSid: '',
+  schDay: 0, schSid: '', schForm: null, querySub: 'list' };
+
+function uid(){ return 's' + Date.now().toString(36) + Math.random().toString(36).slice(2,6); }
+function ymd(d){
+  return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
+}
+function parseYmd(s){ var p = String(s).split('-'); return new Date(+p[0], +p[1]-1, +p[2]); }
+function todayStr(){ return ymd(new Date()); }
+function shift(str, n){ var d = parseYmd(str); d.setDate(d.getDate()+n); return ymd(d); }
+function cnDate(str){ var p = String(str).split('-'); return (+p[1]) + '月' + (+p[2]) + '日'; }
+function esc(s){
+  return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+function num(v){ var n = parseFloat(v); return (isNaN(n) || n < 0) ? null : n; }
+
+function load(){
+  var raw = null;
+  try { raw = localStorage.getItem(KEY); } catch(e){ raw = null; }
+  if (raw) {
+    try {
+      var d = JSON.parse(raw);
+      state.students = Array.isArray(d.students) ? d.students : [];
+      state.lessons = (d.lessons && typeof d.lessons === 'object') ? d.lessons : {};
+      state.renewals = Array.isArray(d.renewals) ? d.renewals : [];
+      state.schedule = (d.schedule && typeof d.schedule === 'object') ? d.schedule : {};
+      state.seeded = !!d.seeded;
+      return;
+    } catch(e){ /* 数据损坏，走种子数据 */ }
+  }
+  seed();
+  save();
+}
+function save(){
+  try {
+    localStorage.setItem(KEY, JSON.stringify({
+      students: state.students, lessons: state.lessons, renewals: state.renewals,
+      schedule: state.schedule, seeded: state.seeded, v: 3
+    }));
+  } catch(e){ alert('保存失败：浏览器存储可能已满或被禁用'); }
+}
+
+function seed(){
+  var t = todayStr();
+  var a = { id: uid(), name: '林知墨', total: 24, note: '楷书启蒙', created: shift(t,-20) };
+  var b = { id: uid(), name: '陈砚青', total: 36, note: '行书进阶', created: shift(t,-18) };
+  var c = { id: uid(), name: '苏小雨', total: 12, note: '硬笔入门', created: shift(t,-10) };
+  var d = { id: uid(), name: '王一诺', total: 6,  note: '试听转正式', created: shift(t,-6) };
+  state.students = [a,b,c,d];
+  state.lessons = {};
+  state.lessons[shift(t,-3)] = {
+    date: shift(t,-3), remark: '第一节课：纠正握笔姿势，练横画',
+    items: (function(){ var o={}; o[a.id]={status:'present',hours:2,remark:'握笔有进步'};
+      o[b.id]={status:'present',hours:2,remark:''}; o[c.id]={status:'present',hours:1,remark:''};
+      o[d.id]={status:'present',hours:1,remark:'第一次课'}; return o; })()
+  };
+  state.lessons[shift(t,-2)] = {
+    date: shift(t,-2), remark: '临摹《九成宫》前两行',
+    items: (function(){ var o={}; o[a.id]={status:'present',hours:2,remark:''};
+      o[b.id]={status:'leave',hours:0,remark:'家长请假，已约补课'};
+      o[c.id]={status:'present',hours:2,remark:'结构把握不错'};
+      o[d.id]={status:'absent',hours:1,remark:'临时缺席，按约定扣课时'}; return o; })()
+  };
+  state.lessons[shift(t,-1)] = {
+    date: shift(t,-1), remark: '',
+    items: (function(){ var o={}; o[a.id]={status:'present',hours:null,remark:''};
+      o[b.id]={status:'present',hours:2,remark:''}; o[c.id]={status:'present',hours:1,remark:''};
+      o[d.id]={status:'present',hours:1,remark:'笔画顺序需加强'}; return o; })()
+  };
+  // 续费 / 课包记录：陈砚青的课包 12 天后到期（用于演示到期提醒）
+  state.renewals = [
+    { id: uid(), sid: b.id, date: shift(t,-40), hours: 12, amount: 1200, expire: shift(t,12),  note: '暑期续费 12 课时' },
+    { id: uid(), sid: c.id, date: shift(t,-9),  hours: 10, amount: 980,  expire: shift(t,80),  note: '硬笔进阶包' },
+    { id: uid(), sid: a.id, date: shift(t,-15), hours: 20, amount: 1900, expire: '',           note: '未设有效期' }
+  ];
+  // 每周排课：周三两节、周六一节
+  state.schedule = {
+    '3': [ { id: uid(), start: '09:00', end: '10:30', name: '楷书启蒙班', sids: [a.id, c.id] },
+           { id: uid(), start: '14:00', end: '15:30', name: '行书进阶班', sids: [b.id, d.id] } ],
+    '6': [ { id: uid(), start: '09:00', end: '11:00', name: '周末综合班', sids: [a.id, b.id, c.id] } ]
+  };
+  state.seeded = true;
+}
+
+/* ============ 计算层 ============ */
+function getLesson(date){
+  if (!state.lessons[date]) state.lessons[date] = { date: date, remark: '', items: {} };
+  return state.lessons[date];
+}
+function getRec(date, sid){
+  var L = state.lessons[date];
+  if (L && L.items[sid]) return L.items[sid];
+  return null;
+}
+function setRec(date, sid, patch){
+  var L = getLesson(date);
+  if (!L.items[sid]) L.items[sid] = { status: '', hours: null, remark: '' };
+  for (var k in patch) L.items[sid][k] = patch[k];
+  return L.items[sid];
+}
+function consumedOf(sid){
+  var sum = 0;
+  for (var d in state.lessons) {
+    var it = state.lessons[d].items[sid];
+    if (it && typeof it.hours === 'number') sum += it.hours;
+  }
+  return Math.round(sum * 100) / 100;
+}
+function renewalHoursOf(sid){
+  var sum = 0;
+  for (var i = 0; i < state.renewals.length; i++) {
+    if (state.renewals[i].sid === sid) sum += (num(state.renewals[i].hours) || 0);
+  }
+  return Math.round(sum * 100) / 100;
+}
+function totalHoursOf(sid){          // 总课时 = 初始总课时 + 累计续费课时
+  var s = findStu(sid); if (!s) return 0;
+  return Math.round((s.total + renewalHoursOf(sid)) * 100) / 100;
+}
+function remainingOf(sid){
+  return Math.round((totalHoursOf(sid) - consumedOf(sid)) * 100) / 100;
+}
+function findStu(sid){
+  for (var i = 0; i < state.students.length; i++) if (state.students[i].id === sid) return state.students[i];
+  return null;
+}
+function detailOf(sid){
+  var out = [];
+  for (var d in state.lessons) {
+    var it = state.lessons[d].items[sid];
+    if (it) out.push({ date: d, status: it.status, hours: it.hours, remark: it.remark, lremark: state.lessons[d].remark });
+  }
+  out.sort(function(a,b){ return a.date < b.date ? 1 : -1; });
+  return out;
+}
+function datedLessons(){
+  var out = [];
+  for (var d in state.lessons) {
+    var any = false;
+    for (var k in state.lessons[d].items) { any = true; break; }
+    if (any) out.push(state.lessons[d]);
+  }
+  out.sort(function(a,b){ return a.date < b.date ? -1 : 1; });
+  return out;
+}
+/* 待办：今天未点名 / 出勤未填课时的逾期记录 / 课时不足 */
+function pendingRollcall(){
+  var t = todayStr(), L = state.lessons[t], done = 0;
+  if (L) { for (var i=0;i<state.students.length;i++) if (L.items[state.students[i].id] && L.items[state.students[i].id].status) done++; }
+  return { total: state.students.length, done: done, left: state.students.length - done };
+}
+function pendingHours(){
+  var t = todayStr(), out = [];
+  for (var d in state.lessons) {
+    for (var i = 0; i < state.students.length; i++) {
+      var s = state.students[i], it = state.lessons[d].items[s.id];
+      if (it && it.status === 'present' && (it.hours === null || it.hours === '')) {
+        out.push({ date: d, sid: s.id, name: s.name, overdue: d < t });
+      }
+    }
+  }
+  out.sort(function(a,b){ return a.date < b.date ? -1 : 1; });
+  return out;
+}
+function lowStudents(){
+  var out = [];
+  for (var i=0;i<state.students.length;i++){
+    var r = remainingOf(state.students[i].id);
+    if (r <= 3) out.push({ sid: state.students[i].id, name: state.students[i].name, left: r });
+  }
+  return out;
+}
+/* 每周排课：1=周一 … 7=周日 */
+function weekdayOf(dateStr){
+  var d = parseYmd(dateStr).getDay();
+  return d === 0 ? 7 : d;
+}
+function lessonsOfDay(w){
+  var arr = state.schedule[String(w)] || [];
+  return arr.slice().sort(function(a,b){ return a.start < b.start ? -1 : 1; });
+}
+function todaySchedule(){ return lessonsOfDay(weekdayOf(todayStr())); }
+function ensureSchForm(){
+  if (!state.schForm) state.schForm = { start: '09:00', end: '10:30', name: '', sids: [] };
+  return state.schForm;
+}
+/* 课包到期：距到期日 ≤30 天（含已过期）的续费记录 */
+function daysTo(dateStr){
+  if (!dateStr) return null;
+  var a = parseYmd(todayStr()).getTime(), b = parseYmd(dateStr).getTime();
+  return Math.round((b - a) / 86400000);
+}
+function expiringPkgs(){
+  var out = [];
+  for (var i=0;i<state.renewals.length;i++){
+    var r = state.renewals[i];
+    if (!r.expire) continue;
+    var d = daysTo(r.expire);
+    if (d === null || d > 30) continue;
+    var s = findStu(r.sid);
+    out.push({ id: r.id, sid: r.sid, name: s ? s.name : '（学员已删除）',
+      expire: r.expire, days: d, hours: r.hours, left: remainingOf(r.sid) });
+  }
+  out.sort(function(a,b){ return a.days - b.days; });
+  return out;
+}
+/* 月度课消统计 */
+function monthStat(m){
+  var rows = [], idx = {}, total = 0, cnt = 0;
+  for (var i=0;i<state.students.length;i++){
+    var s = state.students[i];
+    rows.push({ sid: s.id, name: s.name, present: 0, leave: 0, absent: 0, hours: 0 });
+    idx[s.id] = rows[rows.length-1];
+  }
+  for (var d in state.lessons){
+    if (d.slice(0,7) !== m) continue;
+    var L = state.lessons[d], any = false;
+    for (var sid in L.items){
+      var it = L.items[sid];
+      if (!it || !it.status) continue;
+      any = true;
+      var row = idx[sid];
+      if (!row) continue;
+      if (it.status === 'present') row.present++;
+      else if (it.status === 'leave') row.leave++;
+      else if (it.status === 'absent') row.absent++;
+      if (typeof it.hours === 'number') { row.hours += it.hours; total += it.hours; }
+    }
+    if (any) cnt++;
+  }
+  var pc = 0, lc = 0, ac = 0;
+  for (var i=0;i<rows.length;i++){
+    rows[i].hours = Math.round(rows[i].hours * 100) / 100;
+    pc += rows[i].present; lc += rows[i].leave; ac += rows[i].absent;
+  }
+  rows.sort(function(a,b){ return b.hours - a.hours; });
+  total = Math.round(total * 100) / 100;
+  return { month: m, lessons: cnt, hours: total, present: pc, leave: lc, absent: ac,
+    rate: (pc + lc + ac) ? Math.round(pc / (pc + lc + ac) * 100) : 0,
+    avg: rows.length ? Math.round(total / rows.length * 10) / 10 : 0, rows: rows };
+}
+function monthOptions(){
+  var set = {}, t = todayStr().slice(0,7);
+  set[t] = 1;
+  for (var d in state.lessons) { var any = false; for (var k in state.lessons[d].items) { any = true; break; } if (any) set[d.slice(0,7)] = 1; }
+  var arr = [];
+  for (var m in set) arr.push(m);
+  arr.sort(function(a,b){ return a < b ? 1 : -1; });
+  return arr;
+}
+function totalRecords(){
+  var n = state.students.length;
+  for (var d in state.lessons) n += Object.keys(state.lessons[d].items).length;
+  return n;
+}
+
+/* ============ 渲染层（互相之间不调用，统一由 refreshAll 调度） ============ */
+function renderNotice(){
+  var box = document.getElementById('notice');
+  var html = '';
+  if (state.seeded) {
+    html += '<div class="notice"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16h.01"/></svg>'
+      + '<span>当前显示的是示例数据（4 名学员 + 3 次课 + 3 条续费 + 3 节排课），可直接修改或一键清空后录入真实数据。</span>'
+      + '<button data-act="reset">清空示例</button></div>';
+  }
+  if (totalRecords() >= 30 && !state.noticeHidden) {
+    html += '<div class="notice"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 3v12"/><path d="M7 10l5 5 5-5"/><path d="M4 21h16"/></svg>'
+      + '<span>数据已积累 ' + totalRecords() + ' 条，建议导出一份 JSON 备份保存。</span>'
+      + '<button data-act="export">立即备份</button></div>';
+  }
+  box.innerHTML = html;
+}
+
+function renderToday(){
+  document.getElementById('todayDate').textContent = cnDate(todayStr()) + ' · 周' + '日一二三四五六'.charAt(new Date().getDay());
+  var box = document.getElementById('todayList');
+  var html = '', pr = pendingRollcall(), ph = pendingHours(), low = lowStudents();
+
+  var tsch = todaySchedule();
+  if (tsch.length) {
+    var ts = [];
+    for (var i=0;i<Math.min(tsch.length,3);i++){
+      ts.push(tsch[i].start + (tsch[i].name ? ' ' + tsch[i].name : '') + '（' + tsch[i].sids.length + ' 人）');
+    }
+    html += '<div class="titem">'
+      + '<div class="ic"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M8 3v4M16 3v4M3 11h18"/></svg></div>'
+      + '<div class="tx"><b>今天有 ' + tsch.length + ' 节课</b><em>' + esc(ts.join('、')) + (tsch.length>3 ? ' 等' : '') + '</em></div>'
+      + '<button class="btn sm" data-act="goto" data-tab="schedule">看课表</button></div>';
+  }
+  if (ph.length) {
+    var od = 0; for (var i=0;i<ph.length;i++) if (ph[i].overdue) od++;
+    var names = [];
+    for (var i=0;i<Math.min(ph.length,3);i++) names.push(ph[i].name + '(' + cnDate(ph[i].date) + ')');
+    html += '<div class="titem od">'
+      + '<div class="ic"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 8v5M12 16h.01"/><circle cx="12" cy="12" r="9"/></svg></div>'
+      + '<div class="tx"><b>' + (od ? '有 ' + od + ' 条课时未录入（已逾期）' : '有 ' + ph.length + ' 条课时待录入')
+      + '</b><em>' + esc(names.join('、')) + (ph.length>3 ? ' 等' : '') + '</em></div>'
+      + '<button class="btn sm primary" data-act="goto" data-tab="hours" data-date="' + ph[0].date + '">去补录</button></div>';
+  }
+  if (pr.left > 0) {
+    html += '<div class="titem">'
+      + '<div class="ic"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3 8-8"/><path d="M20 12v7a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h9"/></svg></div>'
+      + '<div class="tx"><b>今天还没点名：' + pr.left + ' 名学员待确认</b><em>已点 ' + pr.done + '/' + pr.total + '，点名后在「课时」里填消耗</em></div>'
+      + '<button class="btn sm" data-act="goto" data-tab="rollcall" data-date="' + todayStr() + '">去点名</button></div>';
+  }
+  if (low.length) {
+    var ns = []; for (var i=0;i<low.length;i++) ns.push(low[i].name + ' 剩 ' + low[i].left + ' 课时');
+    html += '<div class="titem od">'
+      + '<div class="ic"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 3l9 16H3z"/><path d="M12 9v4M12 16h.01"/></svg></div>'
+      + '<div class="tx"><b>课时不足预警：' + low.length + ' 人</b><em>' + esc(ns.join('、')) + '</em></div>'
+      + '<button class="btn sm" data-act="goto" data-tab="query">查看</button></div>';
+  }
+  var exp = expiringPkgs();
+  if (exp.length) {
+    var ex = [], odn = 0;
+    for (var i=0;i<Math.min(exp.length,3);i++){
+      ex.push(exp[i].name + ' ' + (exp[i].days < 0 ? ('已过期 ' + (-exp[i].days) + ' 天') : ('还剩 ' + exp[i].days + ' 天')));
+      if (exp[i].days < 0) odn++;
+    }
+    html += '<div class="titem' + (odn ? ' od' : '') + '">'
+      + '<div class="ic"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M8 3v4M16 3v4M3 11h18"/></svg></div>'
+      + '<div class="tx"><b>课包到期提醒：' + exp.length + ' 个课包' + (odn ? '（' + odn + ' 个已过期）' : ' 30 天内到期')
+      + '</b><em>' + esc(ex.join('、')) + (exp.length>3 ? ' 等' : '') + '</em></div>'
+      + '<button class="btn sm" data-act="goto" data-tab="renew">去续费</button></div>';
+  }
+  if (!html) {
+    html = '<div class="empty">今天的处理事项都完成了，很好。</div>';
+  }
+  box.innerHTML = html;
+}
+
+function renderTabs(){
+  var tabs = document.querySelectorAll('.tab');
+  for (var i=0;i<tabs.length;i++){
+    tabs[i].classList.toggle('on', tabs[i].dataset.tab === state.tab);
+  }
+  var ids = ['students','rollcall','hours','query','renew','schedule'];
+  for (var j=0;j<ids.length;j++){
+    document.getElementById('tab-' + ids[j]).style.display = (ids[j] === state.tab) ? '' : 'none';
+  }
+}
+
+function renderStudents(){
+  var el = document.getElementById('tab-students');
+  var html = '<div class="card"><h3>'
+    + '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#a8352a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>'
+    + '添加学员</h3><p class="sub">姓名 + 初始总课时，添加后可在下方随时编辑</p>'
+    + '<div class="row">'
+    + '<div class="field grow"><label>学员姓名</label><input class="inp" id="newName" placeholder="如：林知墨" maxlength="20"></div>'
+    + '<div class="field" style="width:130px"><label>初始总课时</label><input class="inp" id="newTotal" type="number" inputmode="decimal" min="0" step="0.5" placeholder="24"></div>'
+    + '<div class="field grow"><label>备注（可选）</label><input class="inp" id="newNote" placeholder="如：楷书启蒙" maxlength="30"></div>'
+    + '<div class="field"><label>&nbsp;</label><button class="btn primary" style="min-height:44px" data-act="addStu">添加学员</button></div>'
+    + '</div></div>';
+
+  html += '<div class="card"><h3>'
+    + '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#a8352a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 20v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 20v-2a4 4 0 0 0-3-3.87"/></svg>'
+    + '学员列表（' + state.students.length + ' 人）</h3><p class="sub">剩余课时由「初始总课时 − 已消耗课时」自动计算</p>';
+
+  if (!state.students.length) {
+    html += '<div class="empty">还没有学员，先在上面添加一位。</div>';
+  } else {
+    html += '<div class="grid">';
+    for (var i=0;i<state.students.length;i++){
+      var s = state.students[i], used = consumedOf(s.id), left = remainingOf(s.id);
+      var pct = s.total > 0 ? Math.min(100, Math.max(0, used / s.total * 100)) : 0;
+      html += '<div class="sc' + (left <= 3 ? ' low' : '') + '">';
+      if (state.editId === s.id) {
+        html += '<div class="field" style="margin-bottom:8px"><label>姓名</label><input class="inp" data-inp="editName" data-id="' + s.id + '" value="' + esc(s.name) + '" maxlength="20"></div>'
+          + '<div class="row" style="margin-bottom:8px">'
+          + '<div class="field grow"><label>初始总课时</label><input class="inp" data-inp="editTotal" data-id="' + s.id + '" type="number" inputmode="decimal" min="0" step="0.5" value="' + s.total + '"></div>'
+          + '<div class="field grow"><label>备注</label><input class="inp" data-inp="editNote" data-id="' + s.id + '" value="' + esc(s.note) + '" maxlength="30"></div></div>'
+          + '<div class="row"><button class="btn sm primary" data-act="saveStu" data-id="' + s.id + '">保存</button>'
+          + '<button class="btn sm" data-act="cancelEdit">取消</button></div>';
+      } else {
+        html += '<div class="nm"><span class="ava">' + esc(s.name.slice(0,1)) + '</span>' + esc(s.name)
+          + '<span class="acts"><button class="btn sm icon" data-act="editStu" data-id="' + s.id + '" title="编辑">'
+          + '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg>'
+          + '</button><button class="btn sm icon danger" data-act="delStu" data-id="' + s.id + '" title="删除">'
+          + '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M8 6V4h8v2"/><path d="M6 6l1 14h10l1-14"/></svg>'
+          + '</button></span></div>'
+          + '<p class="sub" style="margin:6px 0 0">' + (s.note ? esc(s.note) : '未填写备注') + ' · 录入于 ' + cnDate(s.created)
+          + (renewalHoursOf(s.id) ? ' · 含续费 +' + renewalHoursOf(s.id) : '') + '</p>'
+          + '<div class="kv"><div><b>' + totalHoursOf(s.id) + '</b><span>总课时</span></div>'
+          + '<div><b class="c">' + used + '</b><span>已消耗</span></div>'
+          + '<div><b class="r">' + left + '</b><span>剩余</span></div></div>'
+          + '<div class="bar"><i style="width:' + pct.toFixed(1) + '%"></i></div>'
+          + (left <= 3 ? '<div class="warn">剩余不足 4 课时，建议提醒续费</div>' : '');
+      }
+      html += '</div>';
+    }
+    html += '</div>';
+  }
+  html += '</div>';
+  el.innerHTML = html;
+}
+
+function statusLabel(v){
+  if (v === 'present') return '出勤';
+  if (v === 'leave') return '请假';
+  if (v === 'absent') return '缺勤';
+  return '未点名';
+}
+
+function renderRollcall(){
+  var el = document.getElementById('tab-rollcall');
+  var L = getLesson(state.curDate);
+  var done = 0;
+  for (var i=0;i<state.students.length;i++) if (L.items[state.students[i].id] && L.items[state.students[i].id].status) done++;
+
+  var html = '<div class="card"><h3>'
+    + '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#a8352a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M8 3v4M16 3v4M3 11h18"/></svg>'
+    + '课程点名</h3><p class="sub">选择上课日期，逐一点名；出勤记录会带到课时录入</p>'
+    + '<div class="row" style="margin-bottom:12px">'
+    + '<div class="field grow"><label>上课日期</label><input class="inp" type="date" data-chg="curDate" value="' + state.curDate + '"></div>'
+    + '<div class="field"><label>&nbsp;</label><button class="btn" style="min-height:44px" data-act="today">回到今天</button></div>'
+    + '<div class="field"><label>&nbsp;</label><button class="btn primary" style="min-height:44px" data-act="allPresent">全部出勤</button></div>'
+    + '</div>'
+    + '<div class="row" style="margin-bottom:12px"><span class="badge present">已点 ' + done + '/' + state.students.length + '</span>'
+    + '<span class="sub" style="margin:0">' + cnDate(state.curDate) + ' 的出勤情况</span></div>';
+
+  if (!state.students.length) {
+    html += '<div class="empty">还没有学员，请先到「学员」页添加。</div>';
+  } else {
+    for (var i=0;i<state.students.length;i++){
+      var s = state.students[i], r = L.items[s.id], st = r ? r.status : '';
+      html += '<div class="lrow"><div class="who"><b>' + esc(s.name) + '</b><em>'
+        + (s.note ? esc(s.note) + ' · ' : '') + '剩余 ' + remainingOf(s.id) + ' 课时</em></div>'
+        + '<div class="seg">'
+        + '<button data-act="setStatus" data-id="' + s.id + '" data-v="present" class="' + (st==='present'?'on':'') + '">出勤</button>'
+        + '<button data-act="setStatus" data-id="' + s.id + '" data-v="leave" class="' + (st==='leave'?'on':'') + '">请假</button>'
+        + '<button data-act="setStatus" data-id="' + s.id + '" data-v="absent" class="' + (st==='absent'?'on':'') + '">缺勤</button>'
+        + '</div></div>';
+    }
+  }
+  html += '</div>';
+  el.innerHTML = html;
+}
+
+function renderHours(){
+  var el = document.getElementById('tab-hours');
+  var L = getLesson(state.curDate);
+  var html = '<div class="card"><h3>'
+    + '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#a8352a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h11l5 5v11a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1z"/><path d="M14 4v6h6"/></svg>'
+    + '课时消耗记录</h3><p class="sub">填写每人本次消耗课时与当日备注；出勤默认 1 课时，可自行修改</p>'
+    + '<div class="row" style="margin-bottom:12px">'
+    + '<div class="field grow"><label>上课日期</label><input class="inp" type="date" data-chg="curDate" value="' + state.curDate + '"></div>'
+    + '<div class="field"><label>&nbsp;</label><button class="btn primary" style="min-height:44px" data-act="fillDefault">出勤填 1 课时</button></div>'
+    + '</div>'
+    + '<div class="field" style="margin-bottom:14px"><label>当日备注（今天发生了什么）</label>'
+    + '<textarea class="inp" data-inp="lessonRemark" data-date="' + state.curDate + '" placeholder="如：临摹《九成宫》前两行，重点纠正竖钩写法">' + esc(L.remark) + '</textarea></div>';
+
+  if (!state.students.length) {
+    html += '<div class="empty">还没有学员，请先到「学员」页添加。</div>';
+  } else {
+    var sum = 0;
+    for (var i=0;i<state.students.length;i++){
+      var s = state.students[i], r = L.items[s.id];
+      var st = r ? r.status : '';
+      var hv = (r && (r.hours === 0 || typeof r.hours === 'number')) ? r.hours : '';
+      if (typeof hv === 'number') { sum += hv; }
+      var dim = (st === 'leave' || st === 'absent' || !st);
+      html += '<div class="lrow' + (dim ? ' dim' : '') + '">'
+        + '<div class="who"><b>' + esc(s.name) + '</b><em><span class="badge ' + (st||'none') + '">' + statusLabel(st) + '</span> · 剩余 ' + remainingOf(s.id) + ' 课时</em></div>'
+        + '<input class="hin" type="number" inputmode="decimal" min="0" step="0.5" placeholder="课时" data-chg="hours" data-id="' + s.id + '" data-date="' + state.curDate + '" value="' + (hv === '' ? '' : hv) + '">'
+        + '</div>'
+        + '<div style="margin:-4px 0 10px"><input class="rmk" placeholder="该学员本次备注（可选）" maxlength="60" data-inp="stuRemark" data-id="' + s.id + '" data-date="' + state.curDate + '" value="' + esc(r ? r.remark : '') + '"></div>';
+    }
+    html += '<div class="row" style="margin-top:6px"><span class="badge present">本日合计 ' + (Math.round(sum*100)/100) + ' 课时</span>'
+      + '<span class="sub" style="margin:0">灰色行表示未点名/请假/缺勤，也可照样记录消耗</span></div>';
+  }
+  html += '</div>';
+  el.innerHTML = html;
+}
+
+function renderQuery(){
+  var el = document.getElementById('tab-query');
+  var sub = (state.querySub === 'report') ? 'report' : 'hours';
+  var subBar = '<div class="seg" style="margin-bottom:14px">'
+    + '<button class="seg-btn' + (sub==='hours'?' active':'') + '" data-act="qsub" data-v="hours">课时查询</button>'
+    + '<button class="seg-btn' + (sub==='report'?' active':'') + '" data-act="qsub" data-v="report">月度报表</button>'
+    + '</div>';
+  if (sub === 'report') {
+    var m = state.rptMonth || todayStr().slice(0,7);
+    var st = monthStat(m);
+    var mOpts = monthOptions();
+    if (mOpts.indexOf(m) < 0) mOpts.push(m);
+    var sel = '';
+    for (var i=0;i<mOpts.length;i++){
+      sel += '<option value="' + mOpts[i] + '"' + (mOpts[i] === m ? ' selected' : '') + '>' + mOpts[i].replace('-', ' 年 ') + ' 月</option>';
+    }
+    var rh = '<div class="card"><h3>'
+      + '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#a8352a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>'
+      + '月度课消报表</h3><p class="sub">按月份汇总上课次数、消耗课时与出勤情况，可导出 CSV</p>'
+      + '<div class="row" style="margin-bottom:12px">'
+      + '<div class="field grow"><label>统计月份</label><select class="inp" data-chg="rptMonth">' + sel + '</select></div>'
+      + '<div class="field"><label>&nbsp;</label><button class="btn" style="min-height:44px" data-act="csvMonth">导出本月 CSV</button></div>'
+      + '</div>'
+      + '<div class="stats">'
+      + '<div class="stat"><b>' + st.lessons + '</b><span>上课次数</span></div>'
+      + '<div class="stat"><b style="color:var(--zhu)">' + st.hours + '</b><span>消耗课时</span></div>'
+      + '<div class="stat"><b>' + st.rate + '%</b><span>出勤率</span></div>'
+      + '<div class="stat"><b>' + st.avg + '</b><span>人均消耗</span></div>'
+      + '</div>'
+      + '<div class="row" style="margin-bottom:12px"><span class="badge present">出勤 ' + st.present + ' 人次</span>'
+      + '<span class="badge leave">请假 ' + st.leave + ' 人次</span>'
+      + '<span class="badge absent">缺勤 ' + st.absent + ' 人次</span></div>';
+    if (!st.rows.length) {
+      rh += '<div class="empty">还没有学员数据</div>';
+    } else {
+      rh += '<div class="dtl" style="border:none;padding-top:0;overflow-x:auto"><table><thead><tr>'
+        + '<th>学员</th><th>出勤</th><th>请假</th><th>缺勤</th><th>本月消耗</th><th>当前剩余</th></tr></thead><tbody>';
+      for (var i=0;i<st.rows.length;i++){
+        var r = st.rows[i];
+        rh += '<tr><td>' + esc(r.name) + '</td><td>' + r.present + '</td><td>' + r.leave + '</td><td>' + r.absent + '</td>'
+          + '<td class="num">' + r.hours + '</td><td>' + remainingOf(r.sid) + '</td></tr>';
+      }
+      rh += '</tbody></table></div>';
+      var items = [];
+      for (var i=0;i<Math.min(st.rows.length,12);i++) items.push({ label: st.rows[i].name, value: st.rows[i].hours });
+      if (items.length) rh += '<div class="chartbox" style="margin-top:12px">' + barChartPairs(items) + '</div>';
+    }
+    rh += '</div>';
+    el.innerHTML = subBar + rh;
+    return;
+  }
+
+  var kw = state.kw.trim();
+  var list = [];
+  for (var i=0;i<state.students.length;i++){
+    if (!kw || state.students[i].name.indexOf(kw) >= 0 || (state.students[i].note||'').indexOf(kw) >= 0) list.push(state.students[i]);
+  }
+  var totalLeft = 0, monthUsed = 0, mPrefix = todayStr().slice(0,7);
+  for (var i=0;i<state.students.length;i++) totalLeft += remainingOf(state.students[i].id);
+  for (var d in state.lessons) {
+    if (d.slice(0,7) !== mPrefix) continue;
+    for (var k in state.lessons[d].items) {
+      var h = state.lessons[d].items[k].hours;
+      if (typeof h === 'number') monthUsed += h;
+    }
+  }
+  totalLeft = Math.round(totalLeft*100)/100; monthUsed = Math.round(monthUsed*100)/100;
+
+  var html = '<div class="card"><h3>'
+    + '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#a8352a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg>'
+    + '课时查询</h3><p class="sub">剩余课时 = 初始总课时 − 累计消耗，点击学员可展开明细</p>'
+    + '<div class="stats">'
+    + '<div class="stat"><b>' + state.students.length + '</b><span>在读学员</span></div>'
+    + '<div class="stat"><b style="color:var(--zhu)">' + monthUsed + '</b><span>本月消耗</span></div>'
+    + '<div class="stat"><b style="color:var(--green)">' + totalLeft + '</b><span>剩余总课时</span></div>'
+    + '</div>'
+    + '<div class="field" style="margin-bottom:12px"><input class="inp" placeholder="搜索学员姓名或备注" data-inp="kw" value="' + esc(state.kw) + '"></div>';
+
+  if (!list.length) {
+    html += '<div class="empty">' + (state.students.length ? '没有匹配的学员' : '还没有学员数据') + '</div>';
+  } else {
+    for (var i=0;i<list.length;i++){
+      var s = list[i], used = consumedOf(s.id), left = remainingOf(s.id);
+      var pct = s.total > 0 ? Math.min(100, Math.max(0, used / s.total * 100)) : 0;
+      html += '<div class="sc' + (left <= 3 ? ' low' : '') + '" style="margin-bottom:10px" data-act="toggleS" data-id="' + s.id + '">'
+        + '<div class="nm"><span class="ava">' + esc(s.name.slice(0,1)) + '</span>' + esc(s.name)
+        + '<span class="acts" style="font-size:12px;color:var(--ink3)">' + (state.openSid === s.id ? '收起' : '明细') + '</span></div>'
+        + '<div class="kv"><div><b>' + totalHoursOf(s.id) + '</b><span>总课时</span></div>'
+        + '<div><b class="c">' + used + '</b><span>已消耗</span></div>'
+        + '<div><b class="r">' + left + '</b><span>剩余</span></div></div>'
+        + '<div class="bar"><i style="width:' + pct.toFixed(1) + '%"></i></div>'
+        + (left <= 3 ? '<div class="warn">剩余不足 4 课时，建议提醒续费</div>' : '');
+      if (state.openSid === s.id) {
+        var dt = detailOf(s.id);
+        if (!dt.length) {
+          html += '<div class="dtl"><div class="empty">还没有上课记录</div></div>';
+        } else {
+          html += '<div class="dtl"><table><thead><tr><th>日期</th><th>出勤</th><th>消耗</th><th>学员备注</th><th>当日课程备注</th></tr></thead><tbody>';
+          for (var j=0;j<dt.length;j++){
+            html += '<tr><td>' + cnDate(dt[j].date) + '</td>'
+              + '<td><span class="badge ' + (dt[j].status||'none') + '">' + statusLabel(dt[j].status) + '</span></td>'
+              + '<td class="num">' + (dt[j].hours === null || dt[j].hours === '' ? '<span style="color:var(--amber)">未录</span>' : dt[j].hours) + '</td>'
+              + '<td>' + (dt[j].remark ? esc(dt[j].remark) : '-') + '</td>'
+              + '<td>' + (dt[j].lremark ? esc(dt[j].lremark) : '-') + '</td></tr>';
+          }
+          html += '</tbody></table></div>';
+        }
+      }
+      html += '</div>';
+    }
+  }
+  html += '</div>';
+
+  var recent = datedLessons().slice(-6);
+  if (recent.length) {
+    html += '<div class="card"><h3>'
+      + '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#a8352a" stroke-width="2" stroke-linecap="round"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>'
+      + '最近课程消耗趋势</h3><p class="sub">最近 ' + recent.length + ' 次课的总消耗课时</p>'
+      + '<div class="chartbox">' + barChart(recent) + '</div></div>';
+  }
+  el.innerHTML = subBar + html;
+}
+
+function renderRenew(){
+  var el = document.getElementById('tab-renew');
+  var exp = expiringPkgs(), sumAmt = 0, sumH = 0;
+  for (var i=0;i<state.renewals.length;i++){
+    sumAmt += (num(state.renewals[i].amount) || 0);
+    sumH += (num(state.renewals[i].hours) || 0);
+  }
+  sumAmt = Math.round(sumAmt*100)/100; sumH = Math.round(sumH*100)/100;
+
+  var opts = '<option value="">选择学员</option>';
+  for (var i=0;i<state.students.length;i++){
+    opts += '<option value="' + state.students[i].id + '"' + (state.renewSid === state.students[i].id ? ' selected' : '') + '>'
+      + esc(state.students[i].name) + '（剩 ' + remainingOf(state.students[i].id) + ' 课时）</option>';
+  }
+
+  var html = '<div class="card"><h3>'
+    + '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#a8352a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="12" rx="2"/><circle cx="12" cy="12" r="2.5"/></svg>'
+    + '记录续费 / 购买课包</h3><p class="sub">续费课时自动累加进该学员总课时，剩余课时实时更新</p>'
+    + '<div class="row">'
+    + '<div class="field grow"><label>学员</label><select class="inp" data-chg="renewSid">' + opts + '</select></div>'
+    + '<div class="field grow"><label>续费日期</label><input class="inp" type="date" id="rnDate" value="' + todayStr() + '"></div>'
+    + '<div class="field" style="width:110px"><label>购买课时</label><input class="inp" id="rnHours" type="number" inputmode="decimal" min="0" step="0.5" placeholder="12"></div>'
+    + '<div class="field" style="width:110px"><label>金额（元）</label><input class="inp" id="rnAmount" type="number" inputmode="decimal" min="0" step="1" placeholder="1200"></div>'
+    + '<div class="field grow"><label>有效期至（选填）</label><input class="inp" type="date" id="rnExpire"></div>'
+    + '<div class="field grow"><label>备注</label><input class="inp" id="rnNote" placeholder="如：暑期续费 12 课时" maxlength="30"></div>'
+    + '<div class="field"><label>&nbsp;</label><button class="btn primary" style="min-height:44px" data-act="addRenew">添加续费</button></div>'
+    + '</div></div>';
+
+  html += '<div class="card"><h3>'
+    + '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#a8352a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>'
+    + '课包到期提醒</h3><p class="sub">距到期日 30 天内的课包；已过期的标红显示</p>';
+  if (!exp.length) {
+    html += '<div class="empty">暂无临近到期的课包</div>';
+  } else {
+    for (var i=0;i<exp.length;i++){
+      var e = exp[i], over = e.days < 0;
+      html += '<div class="titem' + (over ? ' od' : '') + '" style="margin-bottom:8px">'
+        + '<div class="ic"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M8 3v4M16 3v4M3 11h18"/></svg></div>'
+        + '<div class="tx"><b>' + esc(e.name) + ' · ' + e.hours + ' 课时课包</b><em>到期 ' + e.expire
+        + ' · 该学员还剩 ' + e.left + ' 课时</em></div>'
+        + '<span class="badge ' + (over ? 'absent' : 'leave') + '" style="' + (over ? 'background:#f8e9e5;color:#a8352a' : '') + '">'
+        + (over ? '已过期 ' + (-e.days) + ' 天' : '还剩 ' + e.days + ' 天') + '</span></div>';
+    }
+  }
+  html += '</div>';
+
+  html += '<div class="card"><h3>'
+    + '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#a8352a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16M4 12h16M4 18h10"/></svg>'
+    + '续费记录（' + state.renewals.length + ' 条）</h3><p class="sub">累计续费 ' + sumH + ' 课时 · 累计金额 ¥' + sumAmt + '</p>';
+  if (!state.renewals.length) {
+    html += '<div class="empty">还没有续费记录</div>';
+  } else {
+    var rs = state.renewals.slice().sort(function(a,b){ return a.date < b.date ? 1 : -1; });
+    for (var i=0;i<rs.length;i++){
+      var r = rs[i], s = findStu(r.sid), dl = daysTo(r.expire);
+      html += '<div class="lrow">'
+        + '<div class="who"><b>' + esc(s ? s.name : '（学员已删除）') + ' <span style="color:var(--zhu)">+' + r.hours + ' 课时</span></b>'
+        + '<em>' + r.date + (r.amount ? ' · ¥' + r.amount : '') + ' · '
+        + (r.expire ? ('有效期至 ' + r.expire + (dl !== null ? ('（' + (dl < 0 ? '已过期' : '剩 ' + dl + ' 天') + '）') : '')) : '长期有效')
+        + (r.note ? ' · ' + esc(r.note) : '') + '</em></div>'
+        + '<button class="btn sm icon danger" data-act="delRenew" data-id="' + r.id + '" title="删除">'
+        + '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M8 6V4h8v2"/><path d="M6 6l1 14h10l1-14"/></svg>'
+        + '</button></div>';
+    }
+  }
+  html += '</div>';
+  el.innerHTML = html;
+}
+
+function renderSchedule(){
+  var el = document.getElementById('tab-schedule');
+  var f = ensureSchForm();
+  var day = state.schDay || weekdayOf(todayStr());
+  var i, j, html = '';
+
+  var dayOpts = '';
+  for (i=1;i<=7;i++) dayOpts += '<option value="' + i + '"' + (i === day ? ' selected' : '') + '>周' + WD[i-1] + '</option>';
+
+  var chips = '';
+  if (!state.students.length) {
+    chips = '<span class="sub" style="margin:0">请先到「学员」页添加学员</span>';
+  } else {
+    for (i=0;i<state.students.length;i++){
+      var on = f.sids.indexOf(state.students[i].id) >= 0;
+      chips += '<button type="button" class="chip' + (on ? ' on' : '') + '" data-act="toggleSchSid" data-id="' + state.students[i].id + '">'
+        + esc(state.students[i].name) + '</button>';
+    }
+  }
+
+  html += '<div class="card"><h3>'
+    + '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#a8352a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M8 3v4M16 3v4M3 11h18"/></svg>'
+    + '添加排课</h3><p class="sub">按星期排课，上课当天可对照着点名</p>'
+    + '<div class="row">'
+    + '<div class="field grow"><label>星期</label><select class="inp" data-chg="schDay">' + dayOpts + '</select></div>'
+    + '<div class="field grow"><label>开始时间</label><input class="inp" type="time" id="schStart" data-chg="schStart" value="' + esc(f.start) + '"></div>'
+    + '<div class="field grow"><label>结束时间</label><input class="inp" type="time" id="schEnd" data-chg="schEnd" value="' + esc(f.end) + '"></div>'
+    + '<div class="field grow"><label>课程名（选填）</label><input class="inp" id="schName" data-inp="schName" placeholder="如：楷书启蒙班" maxlength="20" value="' + esc(f.name) + '"></div>'
+    + '<div class="field" style="flex-basis:100%"><label>上课学员（点击选择，可多选）</label><div class="chips">' + chips + '</div></div>'
+    + '<div class="field" style="flex-basis:100%"><button class="btn primary" style="min-height:44px" data-act="addSch">添加到周' + WD[day-1] + '</button></div>'
+    + '</div></div>';
+
+  var list = lessonsOfDay(day);
+  html += '<div class="card"><h3>'
+    + '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#a8352a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>'
+    + '周' + WD[day-1] + '课表（' + list.length + ' 节）</h3><p class="sub">点击学员姓名，查看他已上多少课时、还剩多少课时</p>';
+
+  if (!list.length) {
+    html += '<div class="empty">周' + WD[day-1] + '暂无排课，用上面的表单添加</div>';
+  }
+  for (i=0;i<list.length;i++){
+    var L = list[i], names = [];
+    for (j=0;j<L.sids.length;j++){ var st = findStu(L.sids[j]); if (st) names.push(st); }
+    html += '<div class="lrow" style="flex-wrap:wrap">'
+      + '<div class="who"><b>' + esc(L.start) + '–' + esc(L.end) + (L.name ? ' · ' + esc(L.name) : '') + '</b>'
+      + '<em>' + names.length + ' 人</em></div>'
+      + '<button class="btn sm icon danger" data-act="delSch" data-id="' + L.id + '" data-day="' + day + '" title="删除这节课">'
+      + '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M8 6V4h8v2"/><path d="M6 6l1 14h10l1-14"/></svg>'
+      + '</button></div>';
+    if (!names.length) {
+      html += '<div class="empty" style="margin:-4px 0 12px">这节课还没有学员</div>';
+    } else {
+      html += '<div class="chips" style="margin:-2px 0 10px">';
+      for (j=0;j<names.length;j++){
+        html += '<button type="button" class="nametag' + (state.schSid === names[j].id ? ' on' : '') + '" data-act="pickSchStu" data-id="' + names[j].id + '">'
+          + esc(names[j].name)
+          + '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>'
+          + '</button>';
+      }
+      html += '</div>';
+      var det = null;
+      for (j=0;j<names.length;j++) if (names[j].id === state.schSid) det = names[j];
+      if (det) {
+        var used = consumedOf(det.id), left = remainingOf(det.id), tot = totalHoursOf(det.id);
+        var pct = tot > 0 ? Math.min(100, Math.max(0, used / tot * 100)) : 0;
+        var recent = detailOf(det.id).slice(0, 4);
+        html += '<div class="sc" style="margin:0 0 14px;border-color:#ddd2c2">'
+          + '<div class="nm"><span class="ava">' + esc(det.name.slice(0,1)) + '</span>' + esc(det.name)
+          + (det.note ? '<span class="sub" style="margin:0 0 0 6px">' + esc(det.note) + '</span>' : '')
+          + '<span class="acts"><button class="btn sm" data-act="closeSchStu">收起</button></span></div>'
+          + '<div class="kv"><div><b>' + tot + '</b><span>总课时</span></div>'
+          + '<div><b class="c">' + used + '</b><span>已消耗</span></div>'
+          + '<div><b class="r">' + left + '</b><span>剩余</span></div></div>'
+          + '<div class="bar"><i style="width:' + pct.toFixed(1) + '%"></i></div>'
+          + (left <= 3 ? '<div class="warn">剩余不足 4 课时，建议提醒续费</div>' : '');
+        if (!recent.length) {
+          html += '<div class="dtl"><div class="empty">还没有上课记录</div></div>';
+        } else {
+          html += '<div class="dtl"><table><thead><tr><th>日期</th><th>出勤</th><th>消耗</th><th>备注</th></tr></thead><tbody>';
+          for (j=0;j<recent.length;j++){
+            html += '<tr><td>' + cnDate(recent[j].date) + '</td>'
+              + '<td><span class="badge ' + (recent[j].status || 'none') + '">' + statusLabel(recent[j].status) + '</span></td>'
+              + '<td class="num">' + (recent[j].hours === null || recent[j].hours === '' ? '未录' : recent[j].hours) + '</td>'
+              + '<td>' + (recent[j].remark ? esc(recent[j].remark) : '-') + '</td></tr>';
+          }
+          html += '</tbody></table></div>';
+        }
+        html += '</div>';
+      }
+    }
+  }
+  html += '</div>';
+  el.innerHTML = html;
+}
+
+/* 内联 SVG 柱状图（不引任何图表库） */
+function barChartPairs(items){
+  var W = 620, H = 170, pad = 26, n = items.length;
+  if (!n) return '';
+  var vals = [], i;
+  for (i=0;i<n;i++) vals.push(items[i].value);
+  var max = Math.max.apply(null, vals.concat([1]));
+  var total = W - pad*2;
+  var bw = Math.max(16, Math.min(56, Math.floor(total / n) - 16));
+  var gap = n > 1 ? (total - bw*n) / (n - 1) : 8;
+  if (gap < 4) gap = 4;
+  if (bw*n + gap*(n-1) > total) bw = Math.max(14, Math.floor((total - gap*(n-1)) / n));
+  var start = pad + Math.max(0, (total - (bw*n + gap*(n-1))) / 2);
+  var s = '<svg viewBox="0 0 ' + W + ' ' + H + '" width="100%" height="170" role="img" aria-label="消耗课时柱状图">';
+  s += '<line x1="' + pad + '" y1="' + (H-34) + '" x2="' + (W-pad) + '" y2="' + (H-34) + '" stroke="#e9e2d7" stroke-width="1"/>';
+  for (i=0;i<n;i++){
+    var hgt = Math.max(3, (vals[i] / max) * 96);
+    var x = start + i * (bw + gap);
+    var y = H - 34 - hgt;
+    var lb = String(items[i].label);
+    if (lb.length > 5) lb = lb.slice(0,4) + '…';
+    s += '<rect x="' + x.toFixed(1) + '" y="' + y.toFixed(1) + '" width="' + bw + '" height="' + hgt.toFixed(1) + '" rx="6" fill="#a8352a" opacity="' + (0.55 + 0.45*(i+1)/n).toFixed(2) + '"/>';
+    s += '<text x="' + (x + bw/2).toFixed(1) + '" y="' + (y - 6).toFixed(1) + '" text-anchor="middle" font-size="12" fill="#2f2a26" font-weight="700">' + vals[i] + '</text>';
+    s += '<text x="' + (x + bw/2).toFixed(1) + '" y="' + (H - 14) + '" text-anchor="middle" font-size="' + (n > 8 ? 10 : 11) + '" fill="#6b6259">' + esc(lb) + '</text>';
+  }
+  s += '</svg>';
+  return s;
+}
+function barChart(lessons){
+  var items = [];
+  for (var i=0;i<lessons.length;i++){
+    var sum = 0;
+    for (var k in lessons[i].items) { var h = lessons[i].items[k].hours; if (typeof h === 'number') sum += h; }
+    items.push({ label: cnDate(lessons[i].date), value: Math.round(sum*100)/100 });
+  }
+  return barChartPairs(items);
+}
+
+/* ============ 统一刷新入口（唯一调度点） ============ */
+function refreshAll(){
+  renderNotice();
+  renderToday();
+  renderTabs();
+  renderStudents();
+  renderRollcall();
+  renderHours();
+  renderQuery();
+  renderRenew();
+  renderSchedule();
+}
+function go(tab, date){
+  state.tab = tab;
+  if (date) state.curDate = date;
+  if (tab === 'schedule') state.schDay = weekdayOf(todayStr());
+  refreshAll();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+/* ============ 事件层 ============ */
+function addStu(){
+  var n = document.getElementById('newName');
+  var t = document.getElementById('newTotal');
+  var nt = document.getElementById('newNote');
+  var name = (n.value || '').trim();
+  if (!name) { alert('请填写学员姓名'); n.focus(); return; }
+  var total = num(t.value);
+  if (total === null) { alert('请填写初始总课时（数字，可为 0）'); t.focus(); return; }
+  state.students.push({ id: uid(), name: name, total: total, note: (nt.value||'').trim(), created: todayStr() });
+  n.value = ''; t.value = ''; nt.value = '';
+  save(); refreshAll();
+}
+function delStu(id){
+  var s = findStu(id); if (!s) return;
+  if (!confirm('确定删除学员「' + s.name + '」吗？\n该学员的历史点名与课时记录也会一并删除，此操作不可恢复。')) return;
+  state.students = state.students.filter(function(x){ return x.id !== id; });
+  for (var d in state.lessons) { delete state.lessons[d].items[id]; }
+  if (state.editId === id) state.editId = '';
+  save(); refreshAll();
+}
+function setStatus(id, v){
+  var r = getLesson(state.curDate).items[id];
+  var cur = r ? r.status : '';
+  if (cur === v) { v = ''; }              // 再点一次取消该状态
+  setRec(state.curDate, id, { status: v });
+  // 标记出勤时默认消耗 1 课时，老师可在「课时」页修改
+  if (v === 'present' && getRec(state.curDate, id).hours === null) setRec(state.curDate, id, { hours: 1 });
+  save(); refreshAll();
+}
+function addRenew(){
+  var sid = state.renewSid;
+  if (!sid || !findStu(sid)) { alert('请先选择学员'); return; }
+  var h = num(document.getElementById('rnHours').value);
+  if (h === null || h <= 0) { alert('请填写购买课时数（大于 0 的数字）'); return; }
+  var amt = num(document.getElementById('rnAmount').value);
+  state.renewals.push({
+    id: uid(), sid: sid,
+    date: document.getElementById('rnDate').value || todayStr(),
+    hours: h, amount: (amt === null ? 0 : amt),
+    expire: document.getElementById('rnExpire').value || '',
+    note: (document.getElementById('rnNote').value || '').trim()
+  });
+  state.renewSid = '';
+  save(); refreshAll();
+}
+function delRenew(id){
+  var r = null;
+  for (var i=0;i<state.renewals.length;i++) if (state.renewals[i].id === id) r = state.renewals[i];
+  if (!r) return;
+  var s = findStu(r.sid);
+  if (!confirm('确定删除「' + (s ? s.name : '该学员') + '」这条 +' + r.hours + ' 课时的续费记录吗？\n删除后该学员的剩余课时会相应减少。')) return;
+  state.renewals = state.renewals.filter(function(x){ return x.id !== id; });
+  save(); refreshAll();
+}
+function addSch(){
+  var f = ensureSchForm();
+  var day = Number(state.schDay) || weekdayOf(todayStr());
+  var start = (document.getElementById('schStart').value || '').trim();
+  var end = (document.getElementById('schEnd').value || '').trim();
+  var name = (document.getElementById('schName').value || '').trim();
+  if (!start) { alert('请填写开始时间'); return; }
+  if (end && end < start) { alert('结束时间不能早于开始时间'); return; }
+  if (!f.sids.length) { alert('请至少选择一名上课学员'); return; }
+  var key = String(day);
+  if (!state.schedule[key]) state.schedule[key] = [];
+  state.schedule[key].push({ id: uid(), start: start, end: end, name: name, sids: f.sids.slice() });
+  f.sids = []; f.name = '';
+  save(); refreshAll();
+}
+function delSch(id, day){
+  var key = String(Number(day)), arr = state.schedule[key];
+  if (!arr) return;
+  var item = null;
+  for (var i=0;i<arr.length;i++) if (arr[i].id === id) item = arr[i];
+  if (!item) return;
+  if (!confirm('确定删除周' + WD[Number(day)-1] + ' ' + item.start + (item.name ? ' ' + item.name : '') + ' 这节课吗？')) return;
+  state.schedule[key] = arr.filter(function(x){ return x.id !== id; });
+  save(); refreshAll();
+}
+function exportJson(){
+  var data = { app: 'calligraphy-workbench', v: 3, exportedAt: new Date().toISOString(),
+    students: state.students, lessons: state.lessons, renewals: state.renewals, schedule: state.schedule };
+  var blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+  download(blob, '书法工作台备份_' + todayStr() + '.json');
+}
+function exportCsv(month){
+  var rows = [['日期','学员','出勤','消耗课时','学员备注','当日课程备注']];
+  var ls = datedLessons();
+  for (var i=0;i<ls.length;i++){
+    if (month && ls[i].date.slice(0,7) !== month) continue;
+    for (var j=0;j<state.students.length;j++){
+      var s = state.students[j], it = ls[i].items[s.id];
+      if (!it) continue;
+      rows.push([ls[i].date, s.name, statusLabel(it.status),
+        (it.hours === null || it.hours === '' ? '' : it.hours), it.remark || '', ls[i].remark || '']);
+    }
+  }
+  var csv = rows.map(function(r){
+    return r.map(function(c){ return '"' + String(c).replace(/"/g,'""') + '"'; }).join(',');
+  }).join('\r\n');
+  download(new Blob(['\ufeff' + csv], { type: 'text/csv;charset=utf-8' }),
+    (month ? '课时明细_' + month : '课时明细_全部') + '.csv');
+}
+function backupText(){
+  return JSON.stringify({ app: 'calligraphy-workbench', v: 3, exportedAt: new Date().toISOString(),
+    students: state.students, lessons: state.lessons, renewals: state.renewals, schedule: state.schedule });
+}
+function copyBackup(){
+  var txt = backupText();
+  var done = function(){ alert('备份已复制。\n粘贴到微信收藏 / 备忘录 / 文件传输助手即可永久保存。'); };
+  var fallback = function(){
+    var ta = document.createElement('textarea');
+    ta.value = txt;
+    ta.style.position = 'fixed'; ta.style.top = '0'; ta.style.left = '0';
+    ta.style.width = '1px'; ta.style.height = '1px'; ta.style.opacity = '0';
+    document.body.appendChild(ta);
+    ta.focus(); ta.select(); ta.setSelectionRange(0, txt.length);
+    var ok = false;
+    try { ok = document.execCommand('copy'); } catch (e) { ok = false; }
+    ta.remove();
+    if (ok) done();
+    else prompt('复制失败，请手动全选复制下面的备份内容：', txt);
+  };
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(txt).then(done, fallback);
+  } else { fallback(); }
+}
+function pasteRestore(){
+  var txt = prompt('把之前复制的备份内容粘贴到下面：');
+  if (!txt) return;
+  var d;
+  try { d = JSON.parse(txt); } catch (e) { alert('内容不是有效的备份数据，请重新复制完整内容。'); return; }
+  if (!d || !Array.isArray(d.students)) { alert('备份内容不完整，缺少学员数据。'); return; }
+  if (!confirm('将恢复 ' + d.students.length + ' 名学员的数据，覆盖当前内容。确定吗？')) return;
+  applyImport(d);
+}
+function download(blob, name){
+  var a = document.createElement('a');
+  a.href = URL.createObjectURL(blob); a.download = name;
+  document.body.appendChild(a); a.click();
+  setTimeout(function(){ URL.revokeObjectURL(a.href); a.remove(); }, 300);
+}
+function applyImport(d){
+  state.students = d.students;
+  state.lessons = (d.lessons && typeof d.lessons === 'object') ? d.lessons : {};
+  state.renewals = Array.isArray(d.renewals) ? d.renewals : [];
+  state.schedule = (d.schedule && typeof d.schedule === 'object') ? d.schedule : {};
+  state.seeded = false; state.editId = ''; state.openSid = ''; state.renewSid = '';
+  state.schSid = ''; state.schForm = null; state.rptMonth = todayStr().slice(0,7);
+  save(); refreshAll();
+}
+function doImport(file){
+  var fr = new FileReader();
+  fr.onload = function(){
+    try {
+      var d = JSON.parse(fr.result);
+      if (!d || !Array.isArray(d.students)) throw new Error('格式不对');
+      if (!confirm('导入将覆盖当前数据（学员 ' + d.students.length + ' 人）。建议先导出备份，确定继续吗？')) return;
+      applyImport(d);
+      alert('导入成功');
+    } catch(e){ alert('导入失败：文件不是本工作台导出的 JSON 备份'); }
+  };
+  fr.readAsText(file);
+}
+function resetAll(){
+  if (!confirm('确定清空全部数据吗？\n所有学员、点名、课时、续费与课表都会被删除，且无法恢复。')) return;
+  if (!confirm('再确认一次：真的要清空吗？建议先点「导出备份」。')) return;
+  state.students = []; state.lessons = {}; state.renewals = []; state.schedule = {}; state.seeded = false;
+  state.editId = ''; state.openSid = ''; state.renewSid = ''; state.curDate = todayStr();
+  state.rptMonth = todayStr().slice(0,7); state.schSid = ''; state.schForm = null;
+  save(); refreshAll();
+}
+
+document.addEventListener('click', function(e){
+  var el = e.target.closest('[data-act]');
+  if (!el) return;
+  var act = el.dataset.act, id = el.dataset.id, v = el.dataset.v;
+  if (act === 'tab') { state.tab = el.dataset.tab; refreshAll(); return; }
+  if (act === 'goto') { go(el.dataset.tab, el.dataset.date); return; }
+  if (act === 'addStu') { addStu(); return; }
+  if (act === 'editStu') { state.editId = id; refreshAll(); return; }
+  if (act === 'cancelEdit') { state.editId = ''; refreshAll(); return; }
+  if (act === 'saveStu') {
+    var s = findStu(id); if (!s) return;
+    var nm = (s.name || '').trim();
+    if (!nm) { alert('姓名不能为空'); return; }
+    s.name = nm; state.editId = ''; save(); refreshAll(); return;
+  }
+  if (act === 'delStu') { delStu(id); return; }
+  if (act === 'addRenew') { addRenew(); return; }
+  if (act === 'delRenew') { delRenew(id); return; }
+  if (act === 'csvMonth') { exportCsv(state.rptMonth || todayStr().slice(0,7)); return; }
+  if (act === 'qsub') { state.querySub = (el.dataset.v === 'report') ? 'report' : 'hours'; renderQuery(); return; }
+  if (act === 'addSch') { addSch(); return; }
+  if (act === 'delSch') { delSch(id, el.dataset.day); return; }
+  if (act === 'toggleSchSid') {
+    var ff = ensureSchForm(), k = ff.sids.indexOf(id);
+    if (k >= 0) ff.sids.splice(k, 1); else ff.sids.push(id);
+    refreshAll(); return;
+  }
+  if (act === 'pickSchStu') { state.schSid = (state.schSid === id) ? '' : id; refreshAll(); return; }
+  if (act === 'closeSchStu') { state.schSid = ''; refreshAll(); return; }
+  if (act === 'setStatus') { setStatus(id, v); return; }
+  if (act === 'allPresent') {
+    for (var i=0;i<state.students.length;i++){
+      var sid = state.students[i].id;
+      setRec(state.curDate, sid, { status: 'present' });
+      if (getRec(state.curDate, sid).hours === null) setRec(state.curDate, sid, { hours: 1 });
+    }
+    save(); refreshAll(); return;
+  }
+  if (act === 'fillDefault') {
+    var L = getLesson(state.curDate), n = 0;
+    for (var i=0;i<state.students.length;i++){
+      var r = L.items[state.students[i].id];
+      if (r && r.status === 'present' && (r.hours === null || r.hours === '')) { r.hours = 1; n++; }
+    }
+    save(); refreshAll();
+    if (n === 0) alert('当天出勤学员的课时都已填写过了');
+    return;
+  }
+  if (act === 'today') { state.curDate = todayStr(); refreshAll(); return; }
+  if (act === 'toggleS') { state.openSid = (state.openSid === id) ? '' : id; refreshAll(); return; }
+  if (act === 'export') { exportJson(); return; }
+  if (act === 'copy') { copyBackup(); return; }
+  if (act === 'paste') { pasteRestore(); return; }
+  if (act === 'csv') { exportCsv(); return; }
+  if (act === 'import') { document.getElementById('fileIn').click(); return; }
+  if (act === 'reset') { resetAll(); return; }
+});
+
+document.addEventListener('change', function(e){
+  var el = e.target.closest('[data-chg]');
+  if (!el) return;
+  var f = el.dataset.chg;
+  if (f === 'curDate') {
+    if (!el.value) { el.value = todayStr(); return; }
+    state.curDate = el.value; refreshAll(); return;
+  }
+  if (f === 'renewSid') { state.renewSid = el.value; return; }
+  if (f === 'schDay') { state.schDay = Number(el.value); state.schSid = ''; refreshAll(); return; }
+  if (f === 'schStart') { ensureSchForm().start = el.value; return; }
+  if (f === 'schEnd') { ensureSchForm().end = el.value; return; }
+  if (f === 'rptMonth') { if (el.value) { state.rptMonth = el.value; refreshAll(); } return; }
+  if (f === 'hours') {
+    var val = el.value === '' ? null : num(el.value);
+    setRec(el.dataset.date, el.dataset.id, { hours: val });
+    save(); refreshAll(); return;
+  }
+});
+
+document.addEventListener('input', function(e){
+  var el = e.target.closest('[data-inp]');
+  if (!el) return;
+  var f = el.dataset.inp, id = el.dataset.id, d = el.dataset.date;
+  if (f === 'editName' || f === 'editNote') {
+    var s = findStu(id); if (!s) return;
+    if (f === 'editName') s.name = el.value; else s.note = el.value;
+    save(); return;                       // 不重渲染，避免输入框失焦
+  }
+  if (f === 'editTotal') {
+    var s2 = findStu(id); if (!s2) return;
+    var n = num(el.value); if (n !== null) { s2.total = n; save(); }
+    return;
+  }
+  if (f === 'lessonRemark') { getLesson(d).remark = el.value; save(); return; }
+  if (f === 'schName') { ensureSchForm().name = el.value; return; }
+  if (f === 'stuRemark') { setRec(d, id, { remark: el.value }); save(); return; }
+  if (f === 'kw') {
+    state.kw = el.value;
+    renderQuery();                       // 只重渲染本模块，避免联动其它模块
+    var nx = document.querySelector('[data-inp="kw"]');
+    if (nx) { nx.focus(); nx.setSelectionRange(nx.value.length, nx.value.length); }
+    return;
+  }
+});
+
+document.getElementById('fileIn').addEventListener('change', function(e){
+  var f = e.target.files && e.target.files[0];
+  if (f) doImport(f);
+  e.target.value = '';
+});
+
+document.addEventListener('keydown', function(e){
+  if (e.key === 'Enter' && (e.target.id === 'newName' || e.target.id === 'newTotal' || e.target.id === 'newNote')) addStu();
+});
+
+/* ============ 初始化（固定顺序，一次性渲染） ============ */
+document.addEventListener('DOMContentLoaded', function(){
+  load();
+  state.curDate = todayStr();
+  state.rptMonth = todayStr().slice(0,7);
+  state.schDay = weekdayOf(todayStr());
+  state.tab = 'students';
+  refreshAll();
+});
+</script>
+</body>
+</html>
